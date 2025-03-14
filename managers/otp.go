@@ -14,26 +14,25 @@ import (
 	openapi "github.com/twilio/twilio-go/rest/api/v2010"
 )
 
-
 var (
 	ErrInvalidOTP = errors.New("invalid OTP")
 	ErrOTPExpired = errors.New("OTP Expired")
 )
 
-type OtpManager interface{
+type OtpManager interface {
 	SendOTP(userID uint, phoneNumber string) error
 	VerifyOTP(phoneNumber string, otp string) error
 }
 
-type otpManager struct{
-
+type otpManager struct {
+	//dbclient
 }
 
 func NewOtpManager() OtpManager {
 	return &otpManager{}
 }
 
-const otpLength = 6 
+const otpLength = 6
 const otpExpiration = 5 * time.Minute
 
 func (otpManager *otpManager) SendOTP(userID uint, phoneNumber string) error {
@@ -42,15 +41,15 @@ func (otpManager *otpManager) SendOTP(userID uint, phoneNumber string) error {
 	expiresAt := time.Now().Add(otpExpiration)
 
 	otpRecord := models.Otp{
-		UserID : userID,
-		OTP : otp,
-		CreatedAt : time.Now(),
+		UserID:    userID,
+		OTP:       otp,
+		CreatedAt: time.Now(),
 		ExpiresAt: expiresAt,
 	}
 
 	result := database.DB.Create(&otpRecord)
 	if result.Error != nil {
-		return fmt.Errorf("failed to create Otp Record: %w",result.Error)
+		return fmt.Errorf("failed to create Otp Record: %w", result.Error)
 	}
 
 	err := sendOTP(phoneNumber, otp)
