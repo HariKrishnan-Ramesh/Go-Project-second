@@ -21,7 +21,8 @@ var (
 )
 
 type OtpManager interface{
-
+	SendOTP(userID uint, phoneNumber string) error
+	VerifyOTP(phoneNumber string, otp string) error
 }
 
 type otpManager struct{
@@ -61,6 +62,10 @@ func (otpManager *otpManager) SendOTP(userID uint, phoneNumber string) error {
 		}
 		return fmt.Errorf("failed to send OTP via Twilio: %w", err)
 	}
+	return nil
+}
+
+func (otpManager *otpManager) VerifyOTP(phoneNumber string, otp string) error {
 	return nil
 }
 
