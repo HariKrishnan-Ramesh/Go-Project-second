@@ -22,6 +22,12 @@ func NewOtpHandler(otpManager managers.OtpManager) *OtpHandler {
 	}
 }
 
+func (otpHandler *OtpHandler) RegisterOtpApis(router *gin.Engine) {
+	otpGroup := router.Group(otpHandler.groupName)
+	otpGroup.POST("/send",otpHandler.SendOTP)
+	otpGroup.POST("/verify",otpHandler.VerifyOTP)
+}
+
 func (otpHandler *OtpHandler) SendOTP(ctx *gin.Context) {
 	userIDStr := ctx.Query("user_id")
 	phoneNumber := ctx.Query("phone_number")

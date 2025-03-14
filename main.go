@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"main/database"
+	"main/handlers"
+	"main/managers"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +22,10 @@ func main() {
 	log.Println("Database Intializing Started...")
 	database.Initialize()
 	log.Println("Database Intializing Stopped...")
+
+	otpManager := managers.NewOtpManager()
+	otpHandler := handlers.NewOtpHandler(otpManager)
+	otpHandler.RegisterOtpApis(router)
 
 	port := os.Getenv("PORT")
 	if port == "" {

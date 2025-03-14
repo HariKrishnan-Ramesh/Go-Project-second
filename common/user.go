@@ -33,8 +33,8 @@ func BadResponse(ctx *gin.Context, msg string) {
 func SuccessResponseWithData(ctx *gin.Context, msg string, data interface{}) {
 	response := requestResponse{
 		Message: msg,
-		Status: http.StatusOK,
-		Data: data,
+		Status:  http.StatusOK,
+		Data:    data,
 	}
 	ctx.JSON(http.StatusOK, response)
 }
@@ -42,7 +42,7 @@ func SuccessResponseWithData(ctx *gin.Context, msg string, data interface{}) {
 func InternalServerErrorResponse(ctx *gin.Context, msg string) {
 	response := requestResponse{
 		Message: msg,
-		Status: http.StatusInternalServerError,
+		Status:  http.StatusInternalServerError,
 	}
 
 	ctx.JSON(http.StatusInternalServerError, response)
