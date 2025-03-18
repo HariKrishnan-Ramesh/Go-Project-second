@@ -8,10 +8,13 @@ import (
 	"main/database"
 	"main/models"
 	"os"
+	"regexp"
+	"strings"
 	"time"
 
 	twilio "github.com/twilio/twilio-go"
 	openapi "github.com/twilio/twilio-go/rest/api/v2010"
+	"gorm.io/gorm"
 )
 
 var (
@@ -65,6 +68,37 @@ func (otpManager *otpManager) SendOTP(userID uint, phoneNumber string) error {
 }
 
 func (otpManager *otpManager) VerifyOTP(phoneNumber string, otp string) error {
+	phoneNumber = formatPhoneNumber(phoneNumber)
+
+	var user models.User
+	result := database.DB.Where("phone = ?", phoneNumber).First(&user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("user with phone number %s not found: %w", phoneNumber, result.Error)
+		}
+		return fmt.Errorf("failed to find user by phone number: %w", result.Error)
+	}
+
+	var otpRecord models.Otp
+
+	result = database.DB.Where("user_id = ? AND otp = ?", user.Id, otp).
+		Order("created_at DESC").
+		First(&otpRecord)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return ErrInvalidOTP
+		}
+		return fmt.Errorf("failed to find OTP record: %w", result.Error)
+	}
+
+	if otpRecord.ExpiresAt.Before(time.Now()) {
+		return ErrOTPExpired
+	}
+	result = database.DB.Delete(&otpRecord)
+	if result.Error != nil {
+		log.Printf("Error deleting OTP Record : %v", result.Error)
+	}
 	return nil
 }
 
@@ -92,4 +126,23 @@ func sendOTP(phoneNumber, otp string) error {
 	log.Println("OTP sent successfully")
 
 	return nil
+}
+
+func formatPhoneNumber(phoneNumber string) string {
+	
+	reg, err := regexp.Compile("[^0-9]")
+	if err != nil{
+		log.Println(err)
+		return ""
+	}
+
+	phoneNumber = reg.ReplaceAllString(phoneNumber, "")
+
+	if strings.HasPrefix(phoneNumber, "91") {
+		phoneNumber = "+" + phoneNumber
+	} else if !strings.HasPrefix(phoneNumber, "+") {
+		phoneNumber = "+" + phoneNumber
+	}
+
+	return phoneNumber
 }
