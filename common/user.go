@@ -4,7 +4,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
+
+
+type UserCreationInput struct{
+	gorm.Model
+	Name string `json:"name"`
+	Email string `json:"email" gorm:"not null"`
+	Phone string `json:"phone" gorm:"not null"`
+	Password string `json:"not null"`
+}
+
 
 type requestResponse struct {
 	Message string      `json:"message"`
