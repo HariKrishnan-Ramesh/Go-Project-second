@@ -23,6 +23,17 @@ type requestResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
+type UpdatePhoneInput struct {
+	UserID uint `json:"userId" binding:"required"`
+	PhoneNumber string `json:"phone_number" binding:"required"`
+}
+
+type VerifyPhoneInput struct {
+	UserID uint `json:"userid" binding:"required"`
+	PhoneNumber string `json:"phone_number" binding:"required"`
+	OTP string `json:"otp" binding:"required"`
+}
+
 func SuccessResponse(ctx *gin.Context, msg string) {
 	response := requestResponse{
 		Message: msg,
