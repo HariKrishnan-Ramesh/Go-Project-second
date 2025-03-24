@@ -25,7 +25,7 @@ func NewAdminHandler(adminManager managers.AdminManager) *AdminHandler {
 
 func (handler *AdminHandler) RegisterAdminApis(router *gin.Engine){
 	adminGroup := router.Group(handler.groupName)
-	//adminGroup.Use(handler.AdminAuthMiddleware())
+	adminGroup.Use(handler.AdminAuthMiddleware())
 	adminGroup.POST("/logo",handler.UploadLogo)
 	adminGroup.GET("/logo",handler.GetLogo)
 }
