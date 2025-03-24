@@ -50,3 +50,23 @@ type Configuration struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	LogoURL   string         `json:"logoURL"`
 }
+
+type HeroBanner struct {
+	Id          uint              `gorm:"primarykey" json:"id"`
+	CreatedAt   time.Time         `json:"createdAt"`
+	UpdatedAt   time.Time         `json:"updatedAt"`
+	DeletedAt   gorm.DeletedAt    `gorm:"index" json:"-"`
+	Title       string            `json:"index"`
+	Description string            `json:"description"`
+	Images      []HeroBannerImage `json:"images"`
+}
+
+type HeroBannerImage struct {
+	Id           uint           `gorm:"primarykey" json:"id"`
+	CreatedAt    time.Time      `json:"createdAt"`
+	UpdatedAt    time.Time      `json:"updatedAt"`
+	DeletedAt    gorm.DeletedAt `gorm:"index" json:"-"`
+	HeroBannerID uint           `json:"heroBannerId"`
+	HeroBanner   HeroBanner     `gorm:"foreignKey:HeroBannerID"`
+	ImageURL     string         `json:"image_url"`
+}
