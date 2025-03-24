@@ -27,6 +27,11 @@ func main() {
 	otpHandler := handlers.NewOtpHandler(otpManager)
 	otpHandler.RegisterOtpApis(router)
 
+	adminManager := managers.NewAdminManager()
+	adminHandler := handlers.NewAdminHandler(adminManager)
+	adminHandler.RegisterAdminApis(router)
+
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = os.Getenv("PORT")
