@@ -21,6 +21,7 @@ type User struct {
 	IsBuyer   *bool          `json:"isBuyer"  gorm:"default:null"`
 	Address   Address        `json:"address" gorm:"embedded"`
 	Image     string         `json:"image,omitempty"`
+	IsAdmin   *bool          `json:"isadmin" gorm:"default:null"`
 }
 
 type Address struct {
@@ -42,6 +43,10 @@ type Otp struct {
 	ExpiresAt time.Time `json:"expiresAt"`
 }
 
-type Seller struct{
-	
+type Configuration struct {
+	Id        uint           `gorm:"primarykey" json:"id"`
+	CreatedAt time.Time      `json:"createdAt"`
+	UpdatedAt time.Time      `json:"updatedAt"`
+	DeletedAt gorm.DeletedAt `gorm:"index"`
+	LogoURL   string         `json:"logoURL"`
 }
