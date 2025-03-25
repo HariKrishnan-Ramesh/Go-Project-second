@@ -22,12 +22,12 @@ func NewHeroBannerHandler(heroBannerManager managers.HeroBannerManager) *HeroBan
 
 func (handler *HeroBannerHandler) RegisterHeroBannerApis(router *gin.Engine) {
 	heroBannerGroup := router.Group(handler.groupName)
-	heroBannerGroup.GET("", handler.GetHeroBanner) // Modified to be a GET without a parameter. Remove the Id from route.
+	heroBannerGroup.GET("", handler.GetHeroBanner) 
 }
 
 
 
-// GetHeroBanner retrieves the hero banner. No ID is needed. Returns the single banner.
+
 func (handler *HeroBannerHandler) GetHeroBanner(ctx *gin.Context) {
 	heroBanner, err := handler.heroBannerManager.GetHeroBanner()
 	if err != nil {

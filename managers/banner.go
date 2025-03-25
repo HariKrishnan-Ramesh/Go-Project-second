@@ -11,7 +11,7 @@ import (
 )
 
 type HeroBannerManager interface {
-	GetHeroBanner() (common.HeroBannerResponse, error) // Modified to fetch the single existing banner
+	GetHeroBanner() (common.HeroBannerResponse, error) 
 }
 
 type heroBannerManager struct{}
@@ -20,16 +20,13 @@ func NewHeroBannerManager() HeroBannerManager {
 	return &heroBannerManager{}
 }
 
-// GetHeroBanner retrieves the single existing hero banner.  It assumes there is only ONE.  Error handling is crucial here.
 func (manager *heroBannerManager) GetHeroBanner() (common.HeroBannerResponse, error) {
 	var heroBanner models.HeroBanner
 
-	// Assuming you only have ONE HeroBanner record in the database.
 	result := database.DB.Preload("Images").First(&heroBanner)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			// Handle the case where NO HeroBanner exists.  This is important!
 			return common.HeroBannerResponse{}, fmt.Errorf("no hero banner found")
 		}
 		return common.HeroBannerResponse{}, fmt.Errorf("failed to retrieve hero banner: %w", result.Error)
