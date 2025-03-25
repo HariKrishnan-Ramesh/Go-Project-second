@@ -22,18 +22,15 @@ func NewHeroBannerHandler(heroBannerManager managers.HeroBannerManager) *HeroBan
 
 func (handler *HeroBannerHandler) RegisterHeroBannerApis(router *gin.Engine) {
 	heroBannerGroup := router.Group(handler.groupName)
-	heroBannerGroup.GET("", handler.GetHeroBanner) 
+	heroBannerGroup.GET("", handler.GetHeroBanner)
 }
-
-
-
 
 func (handler *HeroBannerHandler) GetHeroBanner(ctx *gin.Context) {
 	heroBanner, err := handler.heroBannerManager.GetHeroBanner()
 	if err != nil {
 		log.Printf("Error retrieving hero banner: %v", err)
-		if err.Error() == "no hero banner found"{
-			common.NotFoundResponse(ctx,"No hero banner found")
+		if err.Error() == "no hero banner found" {
+			common.NotFoundResponse(ctx, "No hero banner found")
 			return
 		}
 		common.InternalServerErrorResponse(ctx, "Failed to retrieve hero banner")

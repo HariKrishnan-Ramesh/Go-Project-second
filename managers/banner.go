@@ -11,7 +11,7 @@ import (
 )
 
 type HeroBannerManager interface {
-	GetHeroBanner() (common.HeroBannerResponse, error) 
+	GetHeroBanner() (common.HeroBannerResponse, error)
 }
 
 type heroBannerManager struct{}
