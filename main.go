@@ -31,6 +31,10 @@ func main() {
 	adminHandler := handlers.NewAdminHandler(adminManager)
 	adminHandler.RegisterAdminApis(router)
 
+	heroBannerManager := managers.NewHeroBannerManager()
+	heroBannerHandler := handlers.NewHeroBannerHandler(heroBannerManager)
+	heroBannerHandler.RegisterHeroBannerApis(router)
+
 
 	port := os.Getenv("PORT")
 	if port == "" {

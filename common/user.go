@@ -69,3 +69,11 @@ func InternalServerErrorResponse(ctx *gin.Context, msg string) {
 
 	ctx.JSON(http.StatusInternalServerError, response)
 }
+
+
+func NotFoundResponse(ctx *gin.Context, message string) {
+	ctx.JSON(http.StatusNotFound, requestResponse{
+		Status:  http.StatusNotFound,
+		Message: message,
+	})
+}
