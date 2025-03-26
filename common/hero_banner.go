@@ -10,5 +10,3 @@ type HeroBannerResponse struct {
 type HeroBannerImageResponse struct {
 	ImageURL string `json:"image_url"`
 }
-
-
