@@ -55,7 +55,7 @@ type HeroBanner struct {
 	Id          uint              `gorm:"primarykey" json:"id"`
 	CreatedAt   time.Time         `json:"createdAt"`
 	UpdatedAt   time.Time         `json:"updatedAt"`
-	DeletedAt   gorm.DeletedAt    `gorm:"index" json:"-"`
+	DeletedAt   gorm.DeletedAt    `gorm:"index"`
 	Title       string            `json:"index"`
 	Description string            `json:"description"`
 	Images      []HeroBannerImage `json:"images"`
@@ -65,8 +65,20 @@ type HeroBannerImage struct {
 	Id           uint           `gorm:"primarykey" json:"id"`
 	CreatedAt    time.Time      `json:"createdAt"`
 	UpdatedAt    time.Time      `json:"updatedAt"`
-	DeletedAt    gorm.DeletedAt `gorm:"index" json:"-"`
+	DeletedAt    gorm.DeletedAt `gorm:"index"`
 	HeroBannerID uint           `json:"heroBannerId"`
-	HeroBanner   HeroBanner     `gorm:"foreignKey:HeroBannerID"`
-	ImageURL     string         `json:"image_url"`
+	// HeroBanner   HeroBanner     `gorm:"foreignKey:HeroBannerID"`
+	ImageURL string `json:"image_url"`
+}
+
+type Category struct {
+	Id            uint           `gorm:"primarykey" json:"id"`
+	CreatedAt     time.Time      `json:"createdAt"`
+	UpdatedAt     time.Time      `json:"updatedAt"`
+	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
+	CategoryName  string         `json:"category_name"`
+	URLKey        string         `json:"url_key"`
+	Description   string         `json:"description"`
+	BannerImage   []string       `gorm:"serializer:json" json:"banner_image"`
+	CategoryImage []string       `gorm:"serializer:json" json:"category_image"`
 }
