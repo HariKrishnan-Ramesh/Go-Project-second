@@ -11,7 +11,8 @@ import (
 )
 
 type HeroBannerManager interface {
-	GetHeroBanner() (common.HeroBannerResponse, error)
+	GetHeroBanner() ([]common.HeroBannerResponse, error)
+	CreateHeroBanner(heroBanner models.HeroBanner) error
 }
 
 type heroBannerManager struct{}
@@ -20,33 +21,48 @@ func NewHeroBannerManager() HeroBannerManager {
 	return &heroBannerManager{}
 }
 
-func (manager *heroBannerManager) GetHeroBanner() (common.HeroBannerResponse, error) {
-	var heroBanner models.HeroBanner
+func (manager *heroBannerManager) CreateHeroBanner(heroBanner models.HeroBanner) error {
+	result := database.DB.Create(&heroBanner)
+	if result.Error != nil {
+		return fmt.Errorf("failed to create hero banner: %w", result.Error)
+	}
+	return nil
+}
 
-	result := database.DB.Preload("Images").First(&heroBanner)
+func (manager *heroBannerManager) GetHeroBanner() ([]common.HeroBannerResponse, error) {
+	var heroBanners []models.HeroBanner
+
+	result := database.DB.Preload("Images").
+		Where("is_active = ?", true).
+		Order("position ASC").
+		Find(&heroBanners)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return common.HeroBannerResponse{}, fmt.Errorf("no hero banner found")
+			return []common.HeroBannerResponse{}, fmt.Errorf("no hero banner found")
 		}
-		return common.HeroBannerResponse{}, fmt.Errorf("failed to retrieve hero banner: %w", result.Error)
+		return []common.HeroBannerResponse{}, fmt.Errorf("failed to retrieve hero banner: %w", result.Error)
 	}
 
-	heroBannerResponse := common.HeroBannerResponse{
-		Id:          heroBanner.Id,
-		Title:       heroBanner.Title,
-		Description: heroBanner.Description,
-		Images:      []common.HeroBannerImageResponse{},
-		Position:    heroBanner.Position,
-		Is_active:   heroBanner.Is_active,
+	if len(heroBanners) == 0 {
+		return []common.HeroBannerResponse{}, fmt.Errorf("no active hero banners found")
 	}
 
-	for _, image := range heroBanner.Images {
-		heroImageResponse := common.HeroBannerImageResponse{
-			ImageURL: image.ImageURL,
+	var heroBannerResponses []common.HeroBannerResponse
+	for _, heroBanner := range heroBanners {
+		heroBannerResponse := common.HeroBannerResponse{
+			Id:          heroBanner.Id,
+			Title:       heroBanner.Title,
+			Description: heroBanner.Description,
+			ImageURL:    heroBanner.ImageURL,
+			Position:    heroBanner.Position,
+			Is_active:   heroBanner.Is_active,
 		}
-		heroBannerResponse.Images = append(heroBannerResponse.Images, heroImageResponse)
-	}
+		heroBannerResponses = append(heroBannerResponses, heroBannerResponse)
 
-	return heroBannerResponse, nil
+	}
+	return heroBannerResponses, nil
+
 }
+
+
