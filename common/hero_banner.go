@@ -5,6 +5,8 @@ type HeroBannerResponse struct {
 	Title       string                    `json:"title"`
 	Description string                    `json:"description"`
 	Images      []HeroBannerImageResponse `json:"images"`
+	Position    uint                      `json:"position"`
+	Is_active   bool                      `json:"is_active"`
 }
 
 type HeroBannerImageResponse struct {

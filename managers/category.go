@@ -34,7 +34,7 @@ func (manager *categoryManager) GetCategory() ([]common.CategoryResponse, error)
 	}
 
 	var categoryResponses []common.CategoryResponse
-	for _, category := range categories {
+	for _, category := range categories {		
 		categoryResponse := common.CategoryResponse{
 			Id:            category.Id,
 			CreatedAt:     category.CreatedAt.String(),
