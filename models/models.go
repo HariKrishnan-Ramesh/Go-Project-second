@@ -56,7 +56,7 @@ type HeroBanner struct {
 	CreatedAt   time.Time      `json:"createdAt"`
 	UpdatedAt   time.Time      `json:"updatedAt"`
 	DeletedAt   gorm.DeletedAt `gorm:"index"`
-	Title       string         `json:"index"`
+	Title       string         `json:"title"`
 	Description string         `json:"description"`
 	ImageURL    string         `json:"imageURL"`
 	Position    uint           `json:"position"`
