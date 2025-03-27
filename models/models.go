@@ -59,6 +59,8 @@ type HeroBanner struct {
 	Title       string            `json:"index"`
 	Description string            `json:"description"`
 	Images      []HeroBannerImage `json:"images"`
+	Position    uint              `json:"position"`
+	Is_active   bool              `json:"is_active"`
 }
 
 type HeroBannerImage struct {
@@ -79,6 +81,6 @@ type Category struct {
 	CategoryName  string         `json:"category_name"`
 	URLKey        string         `json:"url_key"`
 	Description   string         `json:"description"`
-	BannerImage   []string       `gorm:"serializer:json" json:"banner_image"`
-	CategoryImage []string       `gorm:"serializer:json" json:"category_image"`
+	BannerImage   []string       `gorm:"type:json" json:"banner_image"`
+	CategoryImage []string       `gorm:"type:json" json:"category_image"`
 }

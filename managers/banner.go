@@ -37,6 +37,8 @@ func (manager *heroBannerManager) GetHeroBanner() (common.HeroBannerResponse, er
 		Title:       heroBanner.Title,
 		Description: heroBanner.Description,
 		Images:      []common.HeroBannerImageResponse{},
+		Position:    heroBanner.Position,
+		Is_active:   heroBanner.Is_active,
 	}
 
 	for _, image := range heroBanner.Images {

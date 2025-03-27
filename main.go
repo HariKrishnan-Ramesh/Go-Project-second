@@ -1,47 +1,48 @@
-package main
+	package main
 
-import (
-	"log"
-	"main/database"
-	"main/handlers"
-	"main/managers"
-	"os"
+	import (
+		"log"
+		"main/database"
+		"main/handlers"
+		"main/managers"
+		"os"
 
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-)
+		"github.com/gin-gonic/gin"
+		"github.com/joho/godotenv"
+	)
 
-func main() {
-	router := gin.Default()
+	func main() {
+		router := gin.Default()
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
 
-	log.Println("Database Intializing Started...")
-	database.Initialize()
-	log.Println("Database Intializing Stopped...")
+		log.Println("Database Intializing Started...")
+		database.Initialize()
+		log.Println("Database Intializing Stopped...")
 
-	otpManager := managers.NewOtpManager()
-	otpHandler := handlers.NewOtpHandler(otpManager)
-	otpHandler.RegisterOtpApis(router)
+		otpManager := managers.NewOtpManager()
+		otpHandler := handlers.NewOtpHandler(otpManager)
+		otpHandler.RegisterOtpApis(router)
 
-	adminManager := managers.NewAdminManager()
-	adminHandler := handlers.NewAdminHandler(adminManager)
-	adminHandler.RegisterAdminApis(router)
+		adminManager := managers.NewAdminManager()
+		adminHandler := handlers.NewAdminHandler(adminManager)
+		adminHandler.RegisterAdminApis(router)
+		
+		heroBannerManager := managers.NewHeroBannerManager()
+		heroBannerHandler := handlers.NewHeroBannerHandler(heroBannerManager)
+		heroBannerHandler.RegisterHeroBannerApis(router)
 
-	heroBannerManager := managers.NewHeroBannerManager()
-	heroBannerHandler := handlers.NewHeroBannerHandler(heroBannerManager)
-	heroBannerHandler.RegisterHeroBannerApis(router)
+		categoryManager := managers.NewCategotyManager()
+		categoryHandler := handlers.NewCategoryHandler(categoryManager)
+		categoryHandler.RegisterCategoryApis(router)
 
-	categoryManager := managers.NewCategotyManager()
-	categoryHandler := handlers.NewCategoryHandler(categoryManager)
-	categoryHandler.RegisterCategoryApis(router)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = os.Getenv("PORT")
-	}
-	router.Run(":" + port)
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = os.Getenv("PORT")
+		}
+		router.Run(":" + port)
+	
 }
