@@ -4,6 +4,7 @@ import (
 	"log"
 	"main/common"
 	"main/managers"
+	"main/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,6 +24,28 @@ func NewHeroBannerHandler(heroBannerManager managers.HeroBannerManager) *HeroBan
 func (handler *HeroBannerHandler) RegisterHeroBannerApis(router *gin.Engine) {
 	heroBannerGroup := router.Group(handler.groupName)
 	heroBannerGroup.GET("", handler.GetHeroBanner)
+	heroBannerGroup.POST("", handler.CreateHeroBanner)
+}
+
+func (handler *HeroBannerHandler) CreateHeroBanner(ctx *gin.Context) {
+	var newHeroBanner models.HeroBanner
+
+	// Bind the JSON data from the request body to the newHeroBanner struct
+	if err := ctx.ShouldBindJSON(&newHeroBanner); err != nil {
+		log.Printf("Error binding JSON: %v", err)
+		common.BadResponse(ctx, "Invalid request body")
+		return
+	}
+
+	// Create the HeroBanner in the database using the manager
+	err := handler.heroBannerManager.CreateHeroBanner(newHeroBanner)  // Use the manager!
+	if err != nil {
+		log.Printf("Error creating hero banner: %v", err)
+		common.InternalServerErrorResponse(ctx, "Failed to create hero banner")
+		return
+	}
+
+	common.SuccessResponse(ctx, "Hero banner created successfully")
 }
 
 func (handler *HeroBannerHandler) GetHeroBanner(ctx *gin.Context) {

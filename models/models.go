@@ -52,26 +52,17 @@ type Configuration struct {
 }
 
 type HeroBanner struct {
-	Id          uint              `gorm:"primarykey" json:"id"`
-	CreatedAt   time.Time         `json:"createdAt"`
-	UpdatedAt   time.Time         `json:"updatedAt"`
-	DeletedAt   gorm.DeletedAt    `gorm:"index"`
-	Title       string            `json:"index"`
-	Description string            `json:"description"`
-	Images      []HeroBannerImage `json:"images"`
-	Position    uint              `json:"position"`
-	Is_active   bool              `json:"is_active"`
+	Id          uint           `gorm:"primarykey" json:"id"`
+	CreatedAt   time.Time      `json:"createdAt"`
+	UpdatedAt   time.Time      `json:"updatedAt"`
+	DeletedAt   gorm.DeletedAt `gorm:"index"`
+	Title       string         `json:"index"`
+	Description string         `json:"description"`
+	ImageURL    string         `json:"imageURL"`
+	Position    uint           `json:"position"`
+	Is_active   bool           `json:"is_active"`
 }
 
-type HeroBannerImage struct {
-	Id           uint           `gorm:"primarykey" json:"id"`
-	CreatedAt    time.Time      `json:"createdAt"`
-	UpdatedAt    time.Time      `json:"updatedAt"`
-	DeletedAt    gorm.DeletedAt `gorm:"index"`
-	HeroBannerID uint           `json:"heroBannerId"`
-	// HeroBanner   HeroBanner     `gorm:"foreignKey:HeroBannerID"`
-	ImageURL string `json:"image_url"`
-}
 
 type Category struct {
 	Id            uint           `gorm:"primarykey" json:"id"`
