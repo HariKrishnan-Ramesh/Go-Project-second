@@ -30,15 +30,13 @@ func (handler *HeroBannerHandler) RegisterHeroBannerApis(router *gin.Engine) {
 func (handler *HeroBannerHandler) CreateHeroBanner(ctx *gin.Context) {
 	var newHeroBanner models.HeroBanner
 
-	// Bind the JSON data from the request body to the newHeroBanner struct
 	if err := ctx.ShouldBindJSON(&newHeroBanner); err != nil {
 		log.Printf("Error binding JSON: %v", err)
 		common.BadResponse(ctx, "Invalid request body")
 		return
 	}
 
-	// Create the HeroBanner in the database using the manager
-	err := handler.heroBannerManager.CreateHeroBanner(newHeroBanner)  // Use the manager!
+	err := handler.heroBannerManager.CreateHeroBanner(newHeroBanner)
 	if err != nil {
 		log.Printf("Error creating hero banner: %v", err)
 		common.InternalServerErrorResponse(ctx, "Failed to create hero banner")

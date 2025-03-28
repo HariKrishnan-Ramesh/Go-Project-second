@@ -32,7 +32,7 @@ func (manager *heroBannerManager) CreateHeroBanner(heroBanner models.HeroBanner)
 func (manager *heroBannerManager) GetHeroBanner() ([]common.HeroBannerResponse, error) {
 	var heroBanners []models.HeroBanner
 
-	result := database.DB.Preload("Images").
+	result := database.DB.
 		Where("is_active = ?", true).
 		Order("position ASC").
 		Find(&heroBanners)
