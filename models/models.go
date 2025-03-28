@@ -75,3 +75,13 @@ type Category struct {
 	BannerImage   []string       `gorm:"type:json" json:"banner_image"`
 	CategoryImage []string       `gorm:"type:json" json:"category_image"`
 }
+
+
+// type Wishlist struct {
+// 	Id        uint      `gorm:"primaryKey" json:"id"`
+// 	CreatedAt time.Time `json:"createdAt"`
+// 	UpdatedAt time.Time `json:"updatedAt"`
+// 	UserID    uint      `json:"userID"`
+// 	PropertyID 
+// 	User      User      `json:"user" gorm:"foreignKey:UserID"`
+// }
